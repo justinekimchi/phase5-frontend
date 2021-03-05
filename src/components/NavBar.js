@@ -1,13 +1,27 @@
 import React from 'react'
+import LoginForm from './LoginForm'
+import UserWelcomePage from './UserWelcomePage'
+// import {NavLink} from "react-router-dom"
 
-function NavBar() {
-    return (
-    
-        <div className = "welcome">
-      <h2>Welcome, <span>{user.username}</span></h2>
-       <button onClick={Logout}>Log Out</button>
-     </div>
-       
+const NavBar = (props) => {
+    return(
+        // <div className="navlinks">
+        //     <NavLink to="/" exact>
+        //         About
+        //     </NavLink>
+
+
+        //     <br />
+
+    <div className="right">
+        {props.user ? (
+            <UserWelcomePage user={props.user} />
+        ) :(
+           <LoginForm logInUser={props.logInUser}/>
+            
+        )}
+    </div>
+    // </div>
     )
 }
 

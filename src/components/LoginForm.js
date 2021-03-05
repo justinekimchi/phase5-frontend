@@ -1,35 +1,42 @@
-import React, {useState} from 'react'
+import React from 'react'
 
-function LoginForm({Login, error}) {
+class LoginForm extends React.Component {
 
-    const [details, setDetails]=useState({username:"", email: "", password:""})
-
-    const submitHandler =(e)=>{
-        e.preventDefault()
-        //Call the Login function passed in from App.js
-        Login(details)
+    state={
+        input: ""
     }
+
+    handleChange= (e) =>{
+        this.setState({input: e.target.value})
+    }
+
+    handleSubmit =(e)=>{
+        e.preventDefault()
+        this.props.logInUser(this.state.input)
+        e.target.reset()
+    }
+    render(){
     return (
-        <form onSubmit={submitHandler}>
+        <form onSubmit={(e)=> this.handleSubmit(e)}>
             <div className= "form-inner">
                 <h2>PikFlix</h2>
-                {(error !== "") ? (<div className= "error">{error}</div>) : ""}
                 <div className= "form-group">
                     <label htmlFor= "username">Username:</label>
-                    <input type= "text"  name="username" id="username" onChange={(e) => setDetails({...details, username: e.target.value})} value= {details.username}/>
+                    <input type= "text"  name="username" id="username" onChange={this.handleChange}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="email">Email:</label>
-                    <input type="email" name="email" id="email" onChange={(e) => setDetails({...details, email: e.target.value})} value= {details.email} />
+                    <input type="email" name="email" id="email"  />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password:</label>
-                    <input type="password" name="password" id="password" onChange={(e) => setDetails({...details, password: e.target.value})} value= {details.password} />
+                    <input type="password" name="password" id="password"  />
                 </div>
+              
                 <input type="submit" value= "LOG IN"/>
             </div>
         </form>
     )
 }
-
+}
 export default LoginForm

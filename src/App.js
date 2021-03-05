@@ -1,55 +1,69 @@
 // import logo from './logo.svg';
-import React, { useState, useEffect } from 'react';
-import LoginForm from './components/LoginForm'
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import React from 'react';
+import NavBar from './components/NavBar'
+import MainContainer from './containers/MainContainer'
+// import Home from './components/Home'
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
-function App() {
+class App extends React.Component{
    
-    const [users, setUsers]=useState([])
-    const [user, setUser] = useState({username:"", email: "", password: ""});
-    const [error, setError]= useState("")
+   state ={
+     users: [],
+     currentUser: '',
+     photos: []
+   }
 
-    useEffect(() => {
-      fetch('http://localhost:3000/users')
-      .then(res=>res.json())
-      .then(data=>setUsers(data))
-    }, [])
+   logInUser = (username) => {
+    let current = this.state.users.find(
+        (user) => user.username === username
+    );
+    console.log(current)
+    this.setState({ currentUser: current });
+};
 
+componentDidMount() {
+  fetch("http://localhost:3000/users")
+      .then((resp) => resp.json())
+      .then((users) => this.setState({ users }));
 
-    const Login = (details) => {
-       let current = users.find((user) => user.username === details.username && user.password == details.password && user.email === details.email)
-       
-     if (current) {
-      setUser({
-        username: current.username,
-        email: current.email
-      })}
-       else {
-      setError("Details do not match! Please try again.")
-    }
+  
 
-  }
-
-    const Logout= () => {
-      setUser({username:"", email: "", password: ""})
-    }
-
-  return (
-    <Router>
-    
-    <div className="App">
-   {(user.email !== "") ? (
-     <div className = "welcome">
-       <h2>Welcome, <span>{user.username}</span></h2>
-       <button onClick={Logout}>Log Out</button>
-     </div>
-   ) : (
-     <LoginForm Login={Login} error={error}/>
-   ) }
-    </div>
-    
-    </Router>
-  );
+  fetch("http://localhost:3000/photos")
+      .then((resp) => resp.json())
+      .then((photos) => this.setState({ photos }));
 }
 
-export default App;
+render() {
+  return(
+      <Router>
+    
+      <div className="app">
+       <div className ="app-header">
+         <img
+           className="app-header-image"
+           src="https://cdn.dribbble.com/users/43638/screenshots/713314/pre.png/"
+           alt=""/>
+      <NavBar user={this.state.currentUser} logInUser={this.logInUser}/>
+      {/* <Route
+                        exact
+                        path="/albums"
+                        render={(props) => ( */}
+                            <MainContainer
+                                // {...props}
+                                
+                            
+                                
+                                currentUser={this.state.currentUser}
+                              
+                                
+                        //     />
+                        // )}
+                    />
+    
+       </div> 
+       </div> 
+       </Router>
+  )
+}
+}
+export default App
